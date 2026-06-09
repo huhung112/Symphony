@@ -1,0 +1,173 @@
+[
+  {
+    "squadName": "크라켄의 분노",
+    "team": "Symphony Penguins",
+    "totalScore": 20180,
+    "isVictory": true,
+    "p1Score": 12340,
+    "p2Score": 7840,
+    "timestamp": "2026. 6. 8. AM 7:19:50"
+  },
+  {
+    "squadName": "거인 학살자",
+    "team": "Angry Bees",
+    "totalScore": 21820,
+    "isVictory": true,
+    "p1Score": 8400,
+    "p2Score": 13420,
+    "timestamp": "2026. 6. 8. AM 8:04:47"
+  },
+  {
+    "squadName": "펭귄즈",
+    "team": "Symphony Penguins",
+    "totalScore": 27660,
+    "isVictory": true,
+    "p1Score": 17060,
+    "p2Score": 10600,
+    "timestamp": "2026. 6. 8. AM 8:15:30"
+  },
+  {
+    "squadName": "앵그리비즈",
+    "team": "Angry Bees",
+    "totalScore": 25380,
+    "isVictory": true,
+    "p1Score": 4200,
+    "p2Score": 21180,
+    "timestamp": "2026. 6. 8. AM 8:18:48"
+  },
+  {
+    "squadName": "늑구",
+    "team": "Silent Wolves",
+    "totalScore": 14240,
+    "isVictory": true,
+    "p1Score": 5000,
+    "p2Score": 9240,
+    "timestamp": "2026. 6. 8. AM 8:21:30"
+  },
+  {
+    "squadName": "루난의 허리케인",
+    "team": "Silent Wolves",
+    "totalScore": 12240,
+    "isVictory": true,
+    "p1Score": 2900,
+    "p2Score": 9340,
+    "timestamp": "2026. 6. 8. AM 9:00:17"
+  },
+  {
+    "squadName": "무한의 대검",
+    "team": "Silent Wolves",
+    "totalScore": 19000,
+    "isVictory": true,
+    "p1Score": 9500,
+    "p2Score": 9500,
+    "timestamp": "2026. 6. 8. AM 9:02:55"
+  },
+  {
+    "squadName": "난닝구",
+    "team": "Angry Bees",
+    "totalScore": 54900,
+    "isVictory": true,
+    "p1Score": 25260,
+    "p2Score": 29640,
+    "timestamp": "2026. 6. 8. AM 10:17:12"
+  },
+  {
+    "squadName": "후헝델",
+    "team": "Symphony Penguins",
+    "totalScore": 33120,
+    "isVictory": true,
+    "p1Score": 10300,
+    "p2Score": 22820,
+    "timestamp": "2026. 6. 8. PM 3:25:28"
+  },
+  {
+    "squadName": "울브스",
+    "team": "Silent Wolves",
+    "totalScore": 32300,
+    "isVictory": true,
+    "p1Score": 10600,
+    "p2Score": 21700,
+    "timestamp": "2026. 6. 8. PM 5:42:50"
+  },
+  {
+    "squadName": "폭풍갈퀴퀴",
+    "team": "Silent Wolves",
+    "totalScore": 3600,
+    "isVictory": false,
+    "p1Score": 3600,
+    "p2Score": 0,
+    "timestamp": "2026. 6. 8. PM 5:51:36"
+  },
+  {
+    "squadName": "시포리포포",
+    "team": "Silent Wolves",
+    "totalScore": 2800,
+    "isVictory": false,
+    "p1Score": 2800,
+    "p2Score": 0,
+    "timestamp": "2026. 6. 8. PM 6:05:16"
+  },
+  {
+    "squadName": "리쿠하치마 아루",
+    "team": "Silent Wolves",
+    "totalScore": 82180,
+    "isVictory": true,
+    "p1Score": 51560,
+    "p2Score": 30620,
+    "timestamp": "2026. 6. 8. PM 6:13:39"
+  },
+  {
+    "squadName": "소라사키 히나",
+    "team": "Symphony Penguins",
+    "totalScore": 100360,
+    "isVictory": true,
+    "p1Score": 50360,
+    "p2Score": 50000,
+    "timestamp": "2026. 6. 8. PM 6:22:35"
+  },
+  {
+    "squadName": "스나나오오카미 시로코",
+    "team": "Angry Bees",
+    "totalScore": 83800,
+    "isVictory": true,
+    "p1Score": 64000,
+    "p2Score": 19800,
+    "timestamp": "2026. 6. 8. PM 6:31:52"
+  },
+  {
+    "squadName": "츠카츠키 리오",
+    "team": "Symphony Penguins",
+    "totalScore": 22120,
+    "isVictory": true,
+    "p1Score": 50360,
+    "p2Score": 40000,
+    "timestamp": "2026. 6. 8. PM 6:34:32"
+  },
+  {
+    "squadName": "텐도 아리스스",
+    "team": "Angry Bees",
+    "totalScore": 106000,
+    "isVictory": false,
+    "p1Score": 56000,
+    "p2Score": 50000,
+    "timestamp": "2026. 6. 8. PM 8:13:18"
+  },
+  {
+    "squadName": "killer bee",
+    "team": "Angry Bees",
+    "totalScore": 0,
+    "isVictory": false,
+    "p1Score": 0,
+    "p2Score": 0,
+    "timestamp": "2026. 6. 9. PM 10:15:53"
+  },
+  {
+    "squadName": "익명 응원단",
+    "team": "한화",
+    "totalScore": 0,
+    "isVictory": false,
+    "p1Score": 0,
+    "p2Score": 0,
+    "timestamp": "2026. 6. 9. PM 10:28:22"
+  }
+]

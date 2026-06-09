@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>팀별 응원 통계</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { background-color: #121212; color: #ffffff; }
+        .card { background-color: #1e1e1e; border: none; }
+        .text-highlight { color: #f39c12; }
+    </style>
+</head>
+<body class="p-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h1 class="text-highlight">📊 팀별 응원 통계</h1>
+            <a href="ranking.html" class="btn btn-outline-warning">전체 랭킹 보기 👉</a>
+        </div>
+        
+        <div class="row">
+            <!-- 왼쪽: 막대 그래프 영역 -->
+            <div class="col-md-7 mb-4">
+                <div class="card p-4 h-100">
+                    <h4 class="mb-4 text-center">팀별 플레이 횟수</h4>
+                    <canvas id="teamChart"></canvas>
+                </div>
+            </div>
+
+            <!-- 오른쪽: 팀별 최고 득점자 영역 -->
+            <div class="col-md-5 mb-4">
+                <div class="card p-4 h-100">
+                    <h4 class="mb-4 text-center">최고의 호흡 (팀별 1위)</h4>
+                    <div id="topScorersList" class="d-flex flex-column gap-3">
+                        <!-- 자바스크립트로 채워집니다 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function fetchStats() {
+            try {
+                // 전체 데이터를 가져옵니다.
+                const response = await fetch('/api/get_matches');
+                const data = await response.json();
+
+                // 통계를 담을 객체 준비
+                const teamStats = {
+                    'Symphony Penguins': { count: 0, topName: '-', topScore: 0 },
+                    'Silent Wolves': { count: 0, topName: '-', topScore: 0 },
+                    'Angry Bees': { count: 0, topName: '-', topScore: 0 }
+                };
+
+                // 데이터 분류 작업
+                data.forEach(match => {
+                    let team = match.team;
+                    
+                    // 만약 DB에 저장된 팀 이름이 위 3개 중 하나라면
+                    if (teamStats[team] !== undefined) {
+                        teamStats[team].count += 1; // 플레이 횟수 1 증가
+                        
+                        // 기존 최고 점수보다 높으면 갱신
+                        if (match.totalScore > teamStats[team].topScore) {
+                            teamStats[team].topScore = match.totalScore;
+                            teamStats[team].topName = match.squadName;
+                        }
+                    }
+                });
+
+                // 1. Chart.js로 막대그래프 그리기
+                const ctx = document.getElementById('teamChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['🐧 Symphony Penguins', '🐺 Silent Wolves', '🐝 Angry Bees'],
+                        datasets: [{
+                            label: '플레이 횟수',
+                            data: [teamStats['Symphony Penguins'].count, teamStats['Silent Wolves'].count, teamStats['Angry Bees'].count],
+                            backgroundColor: [
+                                'rgba(54, 162, 235, 0.7)', // 펭귄스 파란색
+                                'rgba(201, 203, 207, 0.7)',// 울브스 회색
+                                'rgba(255, 205, 86, 0.7)'  // 비즈 노란색
+                            ],
+                            borderColor: [
+                                'rgb(54, 162, 235)',
+                                'rgb(201, 203, 207)',
+                                'rgb(255, 205, 86)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: { 
+                                beginAtZero: true,
+                                ticks: { color: 'white', stepSize: 1 } 
+                            },
+                            x: { 
+                                ticks: { color: 'white', font: { size: 14 } } 
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false } // 범례 숨김
+                        }
+                    }
+                });
+
+                // 2. 오른쪽 최고 득점자 UI 채우기
+                const topScorersDiv = document.getElementById('topScorersList');
+                let topScorersHTML = '';
+                
+                for (const [teamName, stats] of Object.entries(teamStats)) {
+                    topScorersHTML += `
+                        <div class="p-3 border rounded border-secondary bg-dark">
+                            <h5 class="text-info">${teamName}</h5>
+                            <div class="d-flex justify-content-between align-items-end">
+                                <span class="fs-4 fw-bold">${stats.topName}</span>
+                                <span class="text-warning">${stats.topScore.toLocaleString()}점</span>
+                            </div>
+                        </div>
+                    `;
+                }
+                topScorersDiv.innerHTML = topScorersHTML;
+
+            } catch (error) {
+                console.error('통계 데이터를 불러오는데 실패했습니다.', error);
+            }
+        }
+
+        fetchStats();
+    </script>
+</body>
+</html>

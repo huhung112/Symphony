@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>야구 응원 게임 실시간 대시보드</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { background-color: #121212; color: #ffffff; }
+        .card { background-color: #1e1e1e; border: none; }
+        .text-highlight { color: #f39c12; }
+    </style>
+</head>
+<body class="p-5">
+    <div class="container">
+        <h1 class="text-center mb-5 text-highlight">⚾ 모션캡처 응원 대시보드 ⚾</h1>
+        
+        <div class="row text-center mb-4">
+            <div class="col-md-6">
+                <div class="card p-4">
+                    <h3>총 플레이 횟수</h3>
+                    <h2 id="totalPlays">0</h2>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card p-4">
+                    <h3>가장 많이 우승한 팀</h3>
+                    <h2 id="bestTeam">-</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="card p-4 mb-4">
+            <h4 class="mb-3">최근 응원단 기록</h4>
+            <table class="table table-dark table-striped">
+                <thead>
+                    <tr>
+                        <th>시간</th>
+                        <th>응원단</th>
+                        <th>팀</th>
+                        <th>총점</th>
+                        <th>결과</th>
+                    </tr>
+                </thead>
+                <tbody id="recordTableBody">
+                    </tbody>
+            </table>
+        </div>
+
+        <!-- 페이지 이동 네비게이션 버튼 -->
+        <div class="d-flex justify-content-center gap-3 mb-4">
+            <a href="ranking.html" class="btn btn-outline-info btn-lg">🏆 전체 랭킹 보기</a>
+            <a href="stats.html" class="btn btn-outline-warning btn-lg">📊 팀별 통계 보기</a>
+            <a href="download.html" class="btn btn-outline-success btn-lg">🎬 내 영상 다운로드</a>
+        </div>
+    </div>
+
+    <script>
+        // 서버에서 데이터를 가져와서 화면에 뿌려주는 자바스크립트
+        async function fetchData() {
+            try {
+                const response = await fetch('/api/get_matches');
+                const data = await response.json();
+
+                // 1. 총 플레이 횟수
+                document.getElementById('totalPlays').innerText = data.length + "회";
+
+                // 2. 최근 기록 테이블 채우기 (최신순)
+                const tbody = document.getElementById('recordTableBody');
+                tbody.innerHTML = '';
+                
+                // 최신 데이터 5개만 역순으로 출력
+                const recentData = data.slice(-5).reverse();
+                recentData.forEach(match => {
+                    const row = `<tr>
+                        <td>${match.timestamp || '-'}</td>
+                        <td>${match.squadName}</td>
+                        <td>${match.team}</td>
+                        <td>${match.totalScore.toLocaleString()}점</td>
+                        <td>${match.isVictory ? '🏆 승리' : '💀 패배'}</td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                });
+
+            } catch (error) {
+                console.error('데이터를 불러오는데 실패했습니다.', error);
+            }
+        }
+
+        // 페이지가 열리면 즉시 데이터 불러오기
+        fetchData();
+        
+        // 5초마다 새로고침 (실시간 효과)
+        setInterval(fetchData, 5000);
+    </script>
+</body>
+</html>
