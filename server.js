@@ -5,7 +5,24 @@ const path = require('path');
 const multer = require('multer');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
+// ----------------------------------------------------
+// 🔹 데이터베이스 및 영상 저장소 경로 설정
+// ----------------------------------------------------
+// Render 환경이면 영구 디스크(/var/data)를, 로컬이면 현재 폴더(__dirname)를 사용합니다.
+const BASE_DIR = process.env.RENDER ? '/var/data' : __dirname;
+
+const dbFilePath = path.join(BASE_DIR, 'database.json');
+const videoDir = path.join(BASE_DIR, 'videos');
+
+// 유니티 클라이언트가 /videos/파일명.mp4 주소로 영상에 접근할 수 있도록 길을 열어줍니다.
+app.use('/videos', express.static(videoDir));
+
+// 서버가 켜질 때 DB 파일이 없으면 빈 배열로 하나 만들어줌
+if (!fs.existsSync(dbFilePath)) {
+    fs.writeFileSync(dbFilePath, JSON.stringify([]));
+}
 
 // 미들웨어 설정
 app.use(express.json());
@@ -33,13 +50,13 @@ const mockDatabase = ["버추얼 길", "장연우", "홈런왕", "에이스"];
 // ----------------------------------------------------
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const dir = 'public/videos'; // 영상을 저장할 폴더
-        // 폴더가 없으면 자동으로 만들어줍니다.
+        const dir = videoDir; // ⭕ 수정 후 (위에서 만든 변수 사용)
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
         }
         cb(null, dir);
     },
+    
     filename: function (req, file, cb) {
         // 영상 파일 이름이 겹치지 않도록 현재 시간(Date.now)을 파일명으로 사용
         cb(null, 'cheer_' + Date.now() + '.mp4'); 
@@ -89,7 +106,7 @@ app.post('/api/upload_video', upload.single('video'), (req, res) => {
     
     // 원래 저장된 임시 파일명 경로와 일련번호로 바꿀 새 경로
     const oldPath = req.file.path; 
-    const newPath = path.join('public', 'videos', `${matchId}.mp4`); 
+    const newPath = path.join(videoDir, `${matchId}.mp4`);
     
     // 파일 이름 변경
     fs.renameSync(oldPath, newPath);
