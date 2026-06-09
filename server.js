@@ -62,27 +62,21 @@ const upload = multer({ storage: storage });
 // 1. [유니티 -> 서버] 닉네임 중복 확인 API (새로 추가됨)
 app.get('/api/check-nickname', (req, res) => {
     const nickname = req.query.nickname;
-
     if (!nickname) {
         return res.status(400).json({ error: '닉네임이 전달되지 않았습니다.' });
     }
 
-    // 1. 데이터베이스(database.json) 읽어오기
     const rawData = fs.readFileSync(dbFilePath);
     const db = JSON.parse(rawData);
-
-    // 2. DB에서 닉네임(squadName) 검색 
-    // (replace로 모든 띄어쓰기를 없애고, toLowerCase()로 대소문자 구분을 없애서 완벽하게 차단합니다)
     const searchTarget = nickname.replace(/\s+/g, '').toLowerCase();
 
-    const isDuplicate = db.some((match) => {
-        if (!match.squadName) return false;
-        const existName = match.squadName.replace(/\s+/g, '').toLowerCase();
-        return existName === searchTarget;
-    });
+    const norm = (s) => (s || '').replace(/\s+/g, '').toLowerCase();
 
-    // 3. 검사 결과를 반환
-    res.json({ isDuplicate: isDuplicate });
+    // DB에 저장된 닉네임 + mockDatabase 둘 다 검사
+    const inDb = db.some((match) => norm(match.squadName) === searchTarget);
+    const inMock = mockDatabase.some((name) => norm(name) === searchTarget);
+
+    res.json({ isDuplicate: inDb || inMock });
 });
 
 // 2. [파이썬 -> 서버] 영상 업로드 API
