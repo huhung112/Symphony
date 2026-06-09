@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000;
 // 🔹 데이터베이스 및 영상 저장소 경로 설정
 // ----------------------------------------------------
 // Render 환경이면 영구 디스크(/var/data)를, 로컬이면 현재 폴더(__dirname)를 사용합니다.
-const BASE_DIR = process.env.RENDER ? '/var/data' : __dirname;
+const BASE_DIR = process.env.RAILWAY_VOLUME_MOUNT_PATH || __dirname;
 
 const dbFilePath = path.join(BASE_DIR, 'database.json');
 const videoDir = path.join(BASE_DIR, 'videos');
@@ -31,16 +31,6 @@ app.use(cors());
 // 정적 파일(웹페이지 HTML)을 제공할 폴더 설정
 app.use(express.static('public'));
 
-// ----------------------------------------------------
-// 🔹 데이터베이스 및 임시 데이터 설정
-// ----------------------------------------------------
-// 기존 기록용 데이터베이스 파일 경로 설정 (이 파일에 영구 저장됨)
-const dbFilePath = path.join(__dirname, 'database.json');
-
-// 서버가 켜질 때 DB 파일이 없으면 빈 배열로 하나 만들어줌
-if (!fs.existsSync(dbFilePath)) {
-    fs.writeFileSync(dbFilePath, JSON.stringify([]));
-}
 
 // 닉네임 중복 검사용 가상의 데이터베이스 (이미 누군가 사용 중인 닉네임들)
 const mockDatabase = ["버추얼 길", "장연우", "홈런왕", "에이스"];
