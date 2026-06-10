@@ -3,135 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>팀별 응원 통계</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body { background-color: #121212; color: #ffffff; }
-        .card { background-color: #1e1e1e; border: none; }
-        .text-highlight { color: #f39c12; }
-    </style>
+    <title>BORN 2 CHEER | 팀 소개</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body class="p-5">
-    <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-5">
-            <h1 class="text-highlight">📊 팀별 응원 통계</h1>
-            <a href="ranking.html" class="btn btn-outline-warning">전체 랭킹 보기 👉</a>
-        </div>
-        
-        <div class="row">
-            <!-- 왼쪽: 막대 그래프 영역 -->
-            <div class="col-md-7 mb-4">
-                <div class="card p-4 h-100">
-                    <h4 class="mb-4 text-center">팀별 플레이 횟수</h4>
-                    <canvas id="teamChart"></canvas>
-                </div>
-            </div>
+<body>
+    <header class="site-header">
+        <a class="brand" href="index.html" aria-label="BORN 2 CHEER 홈"><img src="assets/born-2-cheer-logo.png" alt="BORN 2 CHEER"></a>
+        <button class="menu-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false">☰</button>
+        <nav class="site-nav" aria-label="주요 메뉴">
+            <a href="index.html">홈</a>
+            <a href="game.html">게임소개</a>
+            <a class="active" href="stats.html">팀 소개</a>
+            <a href="gallery.html">갤러리</a>
+            <a href="ranking.html">랭킹</a>
+            <a href="download.html">내 영상</a>
+            <a href="contact.html">문의하기</a>
+        </nav>
+    </header>
 
-            <!-- 오른쪽: 팀별 최고 득점자 영역 -->
-            <div class="col-md-5 mb-4">
-                <div class="card p-4 h-100">
-                    <h4 class="mb-4 text-center">최고의 호흡 (팀별 1위)</h4>
-                    <div id="topScorersList" class="d-flex flex-column gap-3">
-                        <!-- 자바스크립트로 채워집니다 -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <main>
+        <section class="page-hero teams-hero">
+            <p class="eyebrow">Teams</p>
+            <h1>팀 소개</h1>
+            <p>세 팀의 컬러, 응원 스타일, 팀 영상과 응원가를 각각의 페이지에서 확인해보세요!</p>
+            <label class="team-select-label">
+                팀 바로가기
+                <select class="team-select" aria-label="팀 선택">
+                    <option value="">팀을 선택하세요</option>
+                    <option value="team-penguins.html">Symphony Penguins</option>
+                    <option value="team-wolves.html">Silent Wolves</option>
+                    <option value="team-bees.html">Angry Bees</option>
+                </select>
+            </label>
+        </section>
 
+        <section class="team-showcase reveal">
+            <a class="team-panel penguins" href="team-penguins.html">
+                <img src="assets/logo-penguins.png" alt="Symphony Penguins">
+                <div>
+                    <span>Symphony Penguins</span>
+                    <h2>함께 맞추고 함께 승리한다!</h2>
+                    <p>팀워크와 싱크로율로 승리를 만들어가는 심포니 펭귄즈!</p>
+                </div>
+            </a>
+            <a class="team-panel wolves" href="team-wolves.html">
+                <img src="assets/logo-wolves.png" alt="Silent Wolves">
+                <div>
+                    <span>Silent Wolves</span>
+                    <h2>조용하지만 강하게, 끝까지 물고 늘어진다!</h2>
+                    <p>침착한 집중력과 강한 승부욕으로 마지막까지 순위를 끌어올리는 사일런트 울브즈!</p>
+                </div>
+            </a>
+            <a class="team-panel bees" href="team-bees.html">
+                <img src="assets/logo-bees.png" alt="Angry Bees">
+                <div>
+                    <span>Angry Bees</span>
+                    <h2>빠르게, 과감하게, 승리를 쏘아 올린다!</h2>
+                    <p>톡톡 튀는 에너지와 공격적인 플레이로 분위기를 뒤집는 앵그리 비즈!</p>
+                </div>
+            </a>
+        </section>
+
+        <section class="section reveal">
+            <div class="section-head">
+                <p class="eyebrow">Current Position</p>
+                <h2>현재 팀 순위</h2>
+            </div>
+            <div id="teamBars" class="score-bars">
+                <div class="empty-cell">팀 기록을 불러오는 중입니다.</div>
+            </div>
+            <a class="btn primary center" href="ranking.html">전체 랭킹 보기</a>
+        </section>
+    </main>
+
+    <script src="site.js"></script>
     <script>
-        async function fetchStats() {
+        const formatter = new Intl.NumberFormat('ko-KR');
+        const teams = [
+            { name: 'Symphony Penguins', logo: 'assets/logo-penguins.png', className: 'penguins' },
+            { name: 'Silent Wolves', logo: 'assets/logo-wolves.png', className: 'wolves' },
+            { name: 'Angry Bees', logo: 'assets/logo-bees.png', className: 'bees' }
+        ];
+
+        async function fetchTeamStats() {
             try {
-                // 전체 데이터를 가져옵니다.
                 const response = await fetch('/api/get_matches');
                 const data = await response.json();
-
-                // 통계를 담을 객체 준비
-                const teamStats = {
-                    'Symphony Penguins': { count: 0, topName: '-', topScore: 0 },
-                    'Silent Wolves': { count: 0, topName: '-', topScore: 0 },
-                    'Angry Bees': { count: 0, topName: '-', topScore: 0 }
-                };
-
-                // 데이터 분류 작업
-                data.forEach(match => {
-                    let team = match.team;
-                    
-                    // 만약 DB에 저장된 팀 이름이 위 3개 중 하나라면
-                    if (teamStats[team] !== undefined) {
-                        teamStats[team].count += 1; // 플레이 횟수 1 증가
-                        
-                        // 기존 최고 점수보다 높으면 갱신
-                        if (match.totalScore > teamStats[team].topScore) {
-                            teamStats[team].topScore = match.totalScore;
-                            teamStats[team].topName = match.squadName;
-                        }
-                    }
-                });
-
-                // 1. Chart.js로 막대그래프 그리기
-                const ctx = document.getElementById('teamChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['🐧 Symphony Penguins', '🐺 Silent Wolves', '🐝 Angry Bees'],
-                        datasets: [{
-                            label: '플레이 횟수',
-                            data: [teamStats['Symphony Penguins'].count, teamStats['Silent Wolves'].count, teamStats['Angry Bees'].count],
-                            backgroundColor: [
-                                'rgba(54, 162, 235, 0.7)', // 펭귄스 파란색
-                                'rgba(201, 203, 207, 0.7)',// 울브스 회색
-                                'rgba(255, 205, 86, 0.7)'  // 비즈 노란색
-                            ],
-                            borderColor: [
-                                'rgb(54, 162, 235)',
-                                'rgb(201, 203, 207)',
-                                'rgb(255, 205, 86)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            y: { 
-                                beginAtZero: true,
-                                ticks: { color: 'white', stepSize: 1 } 
-                            },
-                            x: { 
-                                ticks: { color: 'white', font: { size: 14 } } 
-                            }
-                        },
-                        plugins: {
-                            legend: { display: false } // 범례 숨김
-                        }
-                    }
-                });
-
-                // 2. 오른쪽 최고 득점자 UI 채우기
-                const topScorersDiv = document.getElementById('topScorersList');
-                let topScorersHTML = '';
-                
-                for (const [teamName, stats] of Object.entries(teamStats)) {
-                    topScorersHTML += `
-                        <div class="p-3 border rounded border-secondary bg-dark">
-                            <h5 class="text-info">${teamName}</h5>
-                            <div class="d-flex justify-content-between align-items-end">
-                                <span class="fs-4 fw-bold">${stats.topName}</span>
-                                <span class="text-warning">${stats.topScore.toLocaleString()}점</span>
-                            </div>
+                const matches = Array.isArray(data) ? data : [];
+                const totals = teams.map(team => ({
+                    ...team,
+                    score: matches.filter(match => match.team === team.name).reduce((sum, match) => sum + Number(match.totalScore || 0), 0)
+                })).sort((a, b) => b.score - a.score);
+                const max = Math.max(...totals.map(team => team.score), 1);
+                document.getElementById('teamBars').innerHTML = totals.map((team, index) => `
+                    <article class="score-bar ${team.className}">
+                        <img src="${team.logo}" alt="${team.name}">
+                        <div>
+                            <strong>${index + 1}위 ${team.name}</strong>
+                            <div class="track"><span style="width:${Math.max(team.score / max * 100, team.score ? 8 : 0)}%"></span></div>
                         </div>
-                    `;
-                }
-                topScorersDiv.innerHTML = topScorersHTML;
-
+                        <em>${formatter.format(team.score)}점</em>
+                    </article>
+                `).join('');
             } catch (error) {
-                console.error('통계 데이터를 불러오는데 실패했습니다.', error);
+                document.getElementById('teamBars').innerHTML = '<div class="empty-cell">서버 연결을 확인해 주세요.</div>';
             }
         }
 
-        fetchStats();
+        fetchTeamStats();
     </script>
 </body>
 </html>

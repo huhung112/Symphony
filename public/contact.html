@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BORN 2 CHEER | 문의하기</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="index.html" aria-label="BORN 2 CHEER 홈"><img src="assets/born-2-cheer-logo.png" alt="BORN 2 CHEER"></a>
+        <button class="menu-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false">☰</button>
+        <nav class="site-nav" aria-label="주요 메뉴">
+            <a href="index.html">홈</a>
+            <a href="game.html">게임소개</a>
+            <a href="stats.html">팀 소개</a>
+            <a href="gallery.html">갤러리</a>
+            <a href="ranking.html">랭킹</a>
+            <a href="download.html">내 영상</a>
+            <a class="active" href="contact.html">문의하기</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-hero compact">
+            <p class="eyebrow">Contact</p>
+            <h1>문의하기</h1>
+            <p>BORN 2 CHEER와 함께할 작업, 전시, 제휴 문의를 남겨주세요.</p>
+        </section>
+
+        <section class="contact-layout reveal">
+            <form class="contact-form" onsubmit="event.preventDefault(); showContactDone();">
+                <label>이름<input type="text" required placeholder="이름을 입력하세요"></label>
+                <label>이메일<input type="email" required placeholder="email@example.com"></label>
+                <label>문의 유형<select required><option>전시 문의</option><option>제휴 문의</option><option>기술 문의</option><option>기타</option></select></label>
+                <label>제목<input type="text" required placeholder="문의 제목"></label>
+                <label>내용<textarea required placeholder="문의 내용을 적어주세요"></textarea></label>
+                <button class="btn primary full" type="submit">보내기</button>
+                <p id="contactDone" class="done-text" hidden>문의가 접수되었습니다.</p>
+            </form>
+            <aside class="contact-card">
+                <img src="assets/born-2-cheer-logo.png" alt="BORN 2 CHEER">
+                <strong>Having Fun Together</strong>
+                <p>밝고 에너지 넘치는 응원 경험을 함께 만들어갑니다.</p>
+                <div class="sns-row">
+                    <span>Instagram</span>
+                    <span>YouTube</span>
+                    <span>Email</span>
+                </div>
+            </aside>
+        </section>
+    </main>
+
+    <script src="site.js"></script>
+    <script>
+        function showContactDone() {
+            document.getElementById('contactDone').hidden = false;
+        }
+    </script>
+</body>
+</html>
