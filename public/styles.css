@@ -1047,6 +1047,7 @@ tbody tr:hover {
 .video-card,
 .contact-form,
 .contact-card {
+    min-width: 0;
     padding: 28px;
 }
 
@@ -1064,6 +1065,12 @@ tbody tr:hover {
     grid-template-columns: 1fr auto;
     gap: 12px;
     margin-top: 12px;
+}
+
+.search-row input,
+.search-row .btn {
+    width: 100%;
+    min-width: 0;
 }
 
 .result-area {
@@ -1530,6 +1537,23 @@ margin-bottom:20px;
     }
 }
 
+@media (max-width: 760px) {
+    .finder-section {
+        grid-template-columns: 1fr;
+        gap: 18px;
+        padding-top: 36px;
+    }
+
+    .finder-card,
+    .video-card {
+        width: 100%;
+    }
+
+    .search-row {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 940px) {
     .menu-toggle {
         display: inline-grid;
@@ -1642,11 +1666,13 @@ margin-bottom:20px;
         width: 122px;
     }
 
-    .finder-card, search-row {
+    .finder-card,
+    .search-row {
         width: 100%;
         justify-self: center;
     }
 
+    .finder-card input,
     .finder-card .search-input,
     .finder-card .btn {
         width: 100%;
