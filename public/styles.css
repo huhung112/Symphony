@@ -165,7 +165,7 @@ main {
 }
 
 .hero-glass {
-    width: min(650px, 100%);
+    width: min(700px, 100%);
     padding: clamp(26px, 4vw, 44px);
     border: 1px solid rgba(255, 255, 255, 0.66);
     border-radius: var(--radius);
@@ -1523,6 +1523,38 @@ margin-bottom:20px;
 
 .reveal {
     animation: fadeUp 620ms ease both;
+}
+
+.play-main {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 48px;
+    align-items: center;
+
+    grid-column: 1 / -1;
+}
+
+.feature-grid {
+    grid-column: 1 / -1;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 18px;
+
+    margin-top: 40px;
+}
+
+@media (max-width: 940px) {
+
+    .play-main {
+        grid-template-columns: 1fr;
+    }
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+
 }
 
 @keyframes fadeUp {
