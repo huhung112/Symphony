@@ -204,7 +204,7 @@ app.get('/api/get_team_ranking', (req, res) => {
 });
 
 // ----------------------------------------------------
-// 🔹 6. 모든 영상 일괄 다운로드 (추가된 기능)
+// 🔹 6. 모든 영상 일괄 다운로드
 // ----------------------------------------------------
 app.get('/api/videos/download-all', (req, res) => {
     // 저장소가 존재하는지 확인
@@ -230,7 +230,7 @@ app.get('/api/videos/download-all', (req, res) => {
 });
 
 // ----------------------------------------------------
-// 🔹 7. 영상 타임스탬프 목록 CSV 다운로드 (추가된 기능)
+// 🔹 7. 영상 타임스탬프 목록 CSV 다운로드 (데이터베이스 기준)
 // ----------------------------------------------------
 app.get('/api/videos/timestamps', (req, res) => {
     // 데이터베이스 파일이 존재하는지 확인
@@ -263,6 +263,52 @@ app.get('/api/videos/timestamps', (req, res) => {
 
     } catch (e) {
         console.error('[서버] 타임스탬프 추출 실패:', e.message);
+        res.status(500).send({ error: '문서 생성 중 오류가 발생했습니다.' });
+    }
+});
+
+// ----------------------------------------------------
+// 🔹 8. 서버 파일 시스템 기준 영상 메타데이터 CSV 다운로드 (새로 추가)
+// ----------------------------------------------------
+app.get('/api/videos/file-timestamps', (req, res) => {
+    // 영상 폴더가 있는지 확인
+    if (!fs.existsSync(videoDir)) {
+        return res.status(404).send('영상 폴더를 찾을 수 없습니다.');
+    }
+
+    try {
+        // 폴더 안의 모든 파일 목록 읽어오기
+        const files = fs.readdirSync(videoDir);
+        
+        // CSV 헤더 작성 (한글 깨짐 방지용 BOM 포함)
+        let csvContent = '\uFEFF파일명,파일 크기(MB),Railway 저장 시간\n';
+
+        files.forEach(file => {
+            // .mp4 파일만 골라내기
+            if(file.endsWith('.mp4')) {
+                const filePath = path.join(videoDir, file);
+                
+                // 파일의 상세 정보(메타데이터) 가져오기
+                const stats = fs.statSync(filePath);
+                
+                // 파일 크기를 MB 단위로 변환 (소수점 1자리까지)
+                const fileSizeMB = (stats.size / (1024 * 1024)).toFixed(1);
+                
+                // 파일 수정 시간(mtime)을 한국 시간 기준으로 변환
+                const fileTime = new Date(stats.mtime).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
+
+                // CSV 한 줄씩 추가
+                csvContent += `"${file}","${fileSizeMB}MB","${fileTime}"\n`;
+            }
+        });
+
+        // 브라우저 다운로드 설정
+        res.attachment('railway_file_system_times.csv');
+        res.set('Content-Type', 'text/csv; charset=utf-8');
+        res.status(200).send(csvContent);
+
+    } catch (e) {
+        console.error('[서버] 파일 시스템 시간 추출 실패:', e.message);
         res.status(500).send({ error: '문서 생성 중 오류가 발생했습니다.' });
     }
 });
