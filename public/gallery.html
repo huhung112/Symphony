@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BORN 2 CHEER | 갤러리</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="index.html" aria-label="BORN 2 CHEER 홈"><img src="assets/born-2-cheer-logo.png" alt="BORN 2 CHEER"></a>
+        <button class="menu-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false">☰</button>
+        <nav class="site-nav" aria-label="주요 메뉴">
+            <a href="index.html">홈</a>
+            <a href="game.html">게임소개</a>
+            <a href="stats.html">팀 소개</a>
+            <a class="active" href="gallery.html">갤러리</a>
+            <a href="ranking.html">랭킹</a>
+            <a href="download.html">내 영상</a>
+            <a href="contact.html">문의하기</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-hero gallery-hero">
+            <div>
+                <p class="eyebrow">Cheer Gallery</p>
+                <h1>갤러리</h1>
+                <p>팀 컬러와 응원 에너지가 담긴 BORN 2 CHEER 치어리더 이미지를 모아봤습니다.</p>
+            </div>
+        </section>
+
+        <section class="section reveal">
+            <div class="section-head">
+                <div>
+                    <p class="eyebrow">Moments</p>
+                    <h2>응원 이미지</h2>
+                </div>
+                <p class="gallery-note">이미지를 클릭하면 크게 볼 수 있습니다.</p>
+            </div>
+
+            <div class="gallery-grid" aria-label="치어리더 이미지 갤러리">
+                <button class="gallery-card tall" type="button" data-full="assets/gallery-cheer-main.png" data-title="Born 2 Cheer 메인 응원">
+                    <img src="assets/gallery-cheer-main.png" alt="BORN 2 CHEER 메인 응원 이미지">
+                    <span>Born 2 Cheer 메인 응원</span>
+                </button>
+                <button class="gallery-card wide bees" type="button" data-full="assets/gallery-bees-highfive.png" data-title="Angry Bees 하이파이브">
+                    <img src="assets/gallery-bees-highfive.png" alt="Angry Bees 하이파이브 이미지">
+                    <span>Angry Bees 하이파이브</span>
+                </button>
+                <button class="gallery-card tall penguins" type="button" data-full="assets/gallery-penguins-duo.png" data-title="Symphony Penguins 듀오">
+                    <img src="assets/gallery-penguins-duo.png" alt="Symphony Penguins 듀오 응원 이미지">
+                    <span>Symphony Penguins 듀오</span>
+                </button>
+                <button class="gallery-card wide wolves" type="button" data-full="assets/gallery-wolves-duo.png" data-title="Silent Wolves 듀오">
+                    <img src="assets/gallery-wolves-duo.png" alt="Silent Wolves 듀오 응원 이미지">
+                    <span>Silent Wolves 듀오</span>
+                </button>
+                <button class="gallery-card tall penguins" type="button" data-full="assets/gallery-penguins-player.png" data-title="Penguins 플레이어">
+                    <img src="assets/gallery-penguins-player.png" alt="Symphony Penguins 플레이어 이미지">
+                    <span>Penguins 플레이어</span>
+                </button>
+                <button class="gallery-card tall penguins" type="button" data-full="assets/gallery-penguins-cheerleader.png" data-title="Penguins 치어리더">
+                    <img src="assets/gallery-penguins-cheerleader.png" alt="Symphony Penguins 치어리더 이미지">
+                    <span>Penguins 치어리더</span>
+                </button>
+                <button class="gallery-card wide bees" type="button" data-full="assets/gallery-bees-portrait.png" data-title="Angry Bees 포트레이트">
+                    <img src="assets/gallery-bees-portrait.png" alt="Angry Bees 포트레이트 이미지">
+                    <span>Angry Bees 포트레이트</span>
+                </button>
+                <button class="gallery-card wide wolves" type="button" data-full="assets/gallery-wolves-bees-sitting.png" data-title="Silent Wolves x Angry Bees 응원 듀오">
+                    <img src="assets/gallery-wolves-bees-sitting.png" alt="Silent Wolves와 Angry Bees 응원 듀오 이미지">
+                    <span>Silent Wolves x Angry Bees 응원 듀오</span>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <div class="gallery-modal" id="galleryModal" hidden>
+        <button class="modal-close" type="button" aria-label="갤러리 닫기">×</button>
+        <figure>
+            <img id="modalImage" src="" alt="">
+            <figcaption id="modalCaption"></figcaption>
+        </figure>
+    </div>
+
+    <script src="site.js"></script>
+    <script>
+        const modal = document.getElementById('galleryModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalCaption = document.getElementById('modalCaption');
+
+        document.querySelectorAll('.gallery-card').forEach(card => {
+            card.addEventListener('click', () => {
+                modalImage.src = card.dataset.full;
+                modalImage.alt = card.dataset.title;
+                modalCaption.textContent = card.dataset.title;
+                modal.hidden = false;
+                document.body.classList.add('modal-open');
+            });
+        });
+
+        function closeGalleryModal() {
+            modal.hidden = true;
+            modalImage.src = '';
+            document.body.classList.remove('modal-open');
+        }
+
+        document.querySelector('.modal-close').addEventListener('click', closeGalleryModal);
+        modal.addEventListener('click', event => {
+            if (event.target === modal) closeGalleryModal();
+        });
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape' && !modal.hidden) closeGalleryModal();
+        });
+    </script>
+</body>
+</html>

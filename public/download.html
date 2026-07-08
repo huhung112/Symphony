@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BORN 2 CHEER | 내 영상</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="index.html" aria-label="BORN 2 CHEER 홈"><img src="assets/born-2-cheer-logo.png" alt="BORN 2 CHEER"></a>
+        <button class="menu-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false">☰</button>
+        <nav class="site-nav" aria-label="주요 메뉴">
+            <a href="index.html">홈</a>
+            <a href="game.html">게임소개</a>
+            <a href="stats.html">팀 소개</a>
+            <a href="gallery.html">갤러리</a>
+            <a href="ranking.html">랭킹</a>
+            <a class="active" href="download.html">내 영상</a>
+            <a href="contact.html">문의하기</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-hero compact video-hero">
+            <div>
+                <p class="eyebrow">Replay Finder</p>
+                <h1>내 응원 영상</h1>
+                <p>플레이 후 남겨진 나만의 응원 시간을 확인하고 다운로드하세요.</p>
+            </div>
+        </section>
+
+        <section class="finder-section reveal">
+            <div class="finder-card">
+                <label for="serialInput">경기 번호</label>
+                <div class="search-row">
+                    <input type="text" id="serialInput" inputmode="numeric" autocomplete="off" placeholder="123456" maxlength="6">
+                    <button class="btn primary" onclick="searchVideo()">검색</button>
+                </div>
+                <div id="resultArea" class="result-area" aria-live="polite">
+                    <p>경기 종료 화면에 표시된 6자리 번호를 입력해 주세요.</p>
+                </div>
+            </div>
+            <div class="video-list">
+                <article class="video-card">
+                    <div class="thumb">PLAY</div>
+                    <strong>응원 영상 카드</strong>
+                    <span>번호를 입력하면 영상 미리보기와 다운로드 버튼이 표시됩니다.</span>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <script src="site.js"></script>
+    <script>
+        function showResult(html) {
+            document.getElementById('resultArea').innerHTML = html;
+        }
+
+        function searchVideo() {
+            const serial = document.getElementById('serialInput').value.trim();
+            if (!/^[0-9]{6}$/.test(serial)) {
+                showResult('<p class="error-text">경기 번호는 숫자 6자리로 입력해 주세요.</p>');
+                return;
+            }
+
+            const videoUrl = `/videos/${serial}.mp4`;
+            showResult('<p>영상을 확인하는 중입니다.</p>');
+
+            fetch(videoUrl, { method: 'HEAD' })
+                .then(response => {
+                    if (response.ok) {
+                        showResult(`
+                            <h2>영상이 준비되었습니다.</h2>
+                            <video src="${videoUrl}" controls></video>
+                            <a href="${videoUrl}" download="born2cheer_${serial}.mp4" class="btn primary full">영상 다운로드</a>
+                        `);
+                    } else {
+                        showResult('<p class="error-text">해당 번호의 영상이 아직 저장되지 않았거나 번호가 올바르지 않습니다.</p>');
+                    }
+                })
+                .catch(() => showResult('<p class="error-text">서버 연결을 확인해 주세요.</p>'));
+        }
+
+        document.getElementById('serialInput').addEventListener('keydown', event => {
+            if (event.key === 'Enter') searchVideo();
+        });
+    </script>
+</body>
+</html>

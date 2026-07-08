@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BORN 2 CHEER | 팀 소개</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="index.html" aria-label="BORN 2 CHEER 홈"><img src="assets/born-2-cheer-logo.png" alt="BORN 2 CHEER"></a>
+        <button class="menu-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false">☰</button>
+        <nav class="site-nav" aria-label="주요 메뉴">
+            <a href="index.html">홈</a>
+            <a href="game.html">게임소개</a>
+            <a class="active" href="stats.html">팀 소개</a>
+            <a href="gallery.html">갤러리</a>
+            <a href="ranking.html">랭킹</a>
+            <a href="download.html">내 영상</a>
+            <a href="contact.html">문의하기</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-hero teams-hero">
+            <p class="eyebrow">Teams</p>
+            <h1>팀 소개</h1>
+            <p>세 팀의 컬러, 응원 스타일, 팀 영상과 응원가를 각각의 페이지에서 확인해보세요!</p>
+            <label class="team-select-label">
+                팀 바로가기
+                <select class="team-select" aria-label="팀 선택">
+                    <option value="">팀을 선택하세요</option>
+                    <option value="team-penguins.html">Symphony Penguins</option>
+                    <option value="team-wolves.html">Silent Wolves</option>
+                    <option value="team-bees.html">Angry Bees</option>
+                </select>
+            </label>
+        </section>
+
+        <section class="team-showcase reveal">
+            <a class="team-panel penguins" href="team-penguins.html">
+                <img src="assets/logo-penguins.png" alt="Symphony Penguins">
+                <div>
+                    <span>Symphony Penguins</span>
+                    <h2>함께 맞추고 함께 승리한다!</h2>
+                    <p>팀워크와 싱크로율로 승리를 만들어가는 심포니 펭귄즈!</p>
+                </div>
+            </a>
+            <a class="team-panel wolves" href="team-wolves.html">
+                <img src="assets/logo-wolves.png" alt="Silent Wolves">
+                <div>
+                    <span>Silent Wolves</span>
+                    <h2>조용하지만 강하게, 끝까지 물고 늘어진다!</h2>
+                    <p>침착한 집중력과 강한 승부욕으로 마지막까지 순위를 끌어올리는 사일런트 울브즈!</p>
+                </div>
+            </a>
+            <a class="team-panel bees" href="team-bees.html">
+                <img src="assets/logo-bees.png" alt="Angry Bees">
+                <div>
+                    <span>Angry Bees</span>
+                    <h2>빠르게, 과감하게, 승리를 쏘아 올린다!</h2>
+                    <p>톡톡 튀는 에너지와 공격적인 플레이로 분위기를 뒤집는 앵그리 비즈!</p>
+                </div>
+            </a>
+        </section>
+
+        <section class="section reveal">
+            <div class="section-head">
+                <p class="eyebrow">Current Position</p>
+                <h2>현재 팀 순위</h2>
+            </div>
+            <div id="teamBars" class="score-bars">
+                <div class="empty-cell">팀 기록을 불러오는 중입니다.</div>
+            </div>
+            <a class="btn primary center" href="ranking.html">전체 랭킹 보기</a>
+        </section>
+    </main>
+
+    <script src="site.js"></script>
+    <script>
+        const formatter = new Intl.NumberFormat('ko-KR');
+        const teams = [
+            { name: 'Symphony Penguins', logo: 'assets/logo-penguins.png', className: 'penguins' },
+            { name: 'Silent Wolves', logo: 'assets/logo-wolves.png', className: 'wolves' },
+            { name: 'Angry Bees', logo: 'assets/logo-bees.png', className: 'bees' }
+        ];
+
+        async function fetchTeamStats() {
+            try {
+                const response = await fetch('/api/get_matches');
+                const data = await response.json();
+                const matches = Array.isArray(data) ? data : [];
+                const totals = teams.map(team => ({
+                    ...team,
+                    score: matches.filter(match => match.team === team.name).reduce((sum, match) => sum + Number(match.totalScore || 0), 0)
+                })).sort((a, b) => b.score - a.score);
+                const max = Math.max(...totals.map(team => team.score), 1);
+                document.getElementById('teamBars').innerHTML = totals.map((team, index) => `
+                    <article class="score-bar ${team.className}">
+                        <img src="${team.logo}" alt="${team.name}">
+                        <div>
+                            <strong>${index + 1}위 ${team.name}</strong>
+                            <div class="track"><span style="width:${Math.max(team.score / max * 100, team.score ? 8 : 0)}%"></span></div>
+                        </div>
+                        <em>${formatter.format(team.score)}점</em>
+                    </article>
+                `).join('');
+            } catch (error) {
+                document.getElementById('teamBars').innerHTML = '<div class="empty-cell">서버 연결을 확인해 주세요.</div>';
+            }
+        }
+
+        fetchTeamStats();
+    </script>
+</body>
+</html>

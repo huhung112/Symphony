@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BORN 2 CHEER | Symphony Penguins</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="team-page penguins-page">
+    <header class="site-header">
+        <a class="brand" href="index.html" aria-label="BORN 2 CHEER 홈"><img src="assets/born-2-cheer-logo.png" alt="BORN 2 CHEER"></a>
+        <button class="menu-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false">☰</button>
+        <nav class="site-nav" aria-label="주요 메뉴">
+            <a href="index.html">홈</a>
+            <a href="game.html">게임소개</a>
+            <a class="active" href="stats.html">팀 소개</a>
+            <a href="gallery.html">갤러리</a>
+            <a href="ranking.html">랭킹</a>
+            <a href="download.html">내 영상</a>
+            <a href="contact.html">문의하기</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="team-detail-hero penguins">
+            <div class="team-hero-copy">
+                <p class="eyebrow">ONE TEAM, ONE VICTORY</p>
+                <h1>함께 응원하고,<br>함께 승리한다!</h1>
+                <p>심포니 펭귄즈는 서로의 에너지로 점수를 쌓고 함께 승리의 순간을 만드는 리듬 응원 팀입니다.</p>
+                <div class="hero-actions">
+                    <a class="btn primary" href="#team-video">팀 소개 영상 보기</a>
+                    <a class="btn secondary" href="#team-song">응원가 듣기</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="team-media-section reveal">
+            <article class="media-panel" id="team-video">
+                <div class="section-head">
+                    <div>
+                        <p class="eyebrow">Team Video</p>
+                        <h2>팀 소개 영상</h2>
+                    </div>
+                </div>
+                <video controls poster="assets/gallery-penguins-duo.png">
+                    <source src="assets/media/penguins_team_video.mp4.mp4" type="video/mp4">
+                    브라우저가 영상을 지원하지 않습니다.
+                </video>
+            </article>
+            <article class="media-panel" id="team-song">
+                <div class="section-head">
+                    <div>
+                        <p class="eyebrow">Cheer Song</p>
+                        <h2>팀 응원가</h2>
+                    </div>
+                </div>
+                <audio controls>
+                    <source src="assets/media/penguins_cheer_song.mp3" type="audio/mpeg">
+                    브라우저가 오디오를 지원하지 않습니다.
+                </audio>
+            </article>
+        </section>
+
+        <section class="other-teams-section reveal">
+            <div class="other-title">
+                <p class="eyebrow">04</p>
+                <h2>다른 팀 둘러보기</h2>
+                <span>다양한 팀들의 개성과 응원 스타일을 확인해보세요!</span>
+            </div>
+            <div class="other-team-grid">
+                <a class="other-team-card wolves" href="team-wolves.html">
+                    <img src="assets/team-card-wolves.png" alt="Silent Wolves">
+                    <div><strong>사일런트 울브즈</strong><span>조용하지만 강렬한 집중력으로 승리를 노리는 팀</span></div>
+                </a>
+                <a class="other-team-card bees" href="team-bees.html">
+                    <img src="assets/team-card-bees.png" alt="Angry Bees">
+                    <div><strong>앵그리 비즈</strong><span>열정과 에너지로 경기장을 뜨겁게 만드는 팀</span></div>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script src="site.js"></script>
+</body>
+</html>
