@@ -229,6 +229,44 @@ app.get('/api/videos/download-all', (req, res) => {
     archive.finalize();
 });
 
+// ----------------------------------------------------
+// 🔹 7. 영상 타임스탬프 목록 CSV 다운로드 (추가된 기능)
+// ----------------------------------------------------
+app.get('/api/videos/timestamps', (req, res) => {
+    // 데이터베이스 파일이 존재하는지 확인
+    if (!fs.existsSync(dbFilePath)) {
+        return res.status(404).send('기록된 데이터가 없습니다.');
+    }
+
+    try {
+        const rawData = fs.readFileSync(dbFilePath);
+        const db = JSON.parse(rawData);
+
+        // CSV 헤더 작성 (엑셀에서 한글이 깨지지 않도록 UTF-8 BOM \uFEFF 추가)
+        let csvContent = '\uFEFF영상 파일명,응원단 닉네임,선택 팀,녹화 시간\n';
+
+        // 저장된 매치 데이터를 돌면서 한 줄씩 CSV 형식으로 변환
+        db.forEach((match) => {
+            const fileName = match.matchId ? `${match.matchId}.mp4` : '파일 없음';
+            const squadName = match.squadName || '';
+            const team = match.team || '';
+            const timestamp = match.timestamp || '';
+
+            // 데이터에 콤마가 있어도 셀이 깨지지 않도록 큰따옴표로 감싸기
+            csvContent += `"${fileName}","${squadName}","${team}","${timestamp}"\n`;
+        });
+
+        // 브라우저에게 CSV 파일 다운로드임을 알림
+        res.attachment('symphony_video_timestamps.csv');
+        res.set('Content-Type', 'text/csv; charset=utf-8');
+        res.status(200).send(csvContent);
+
+    } catch (e) {
+        console.error('[서버] 타임스탬프 추출 실패:', e.message);
+        res.status(500).send({ error: '문서 생성 중 오류가 발생했습니다.' });
+    }
+});
+
 // 서버 실행
 app.listen(PORT, () => {
     console.log(`🚀 서버 구동 완료! http://localhost:${PORT} 로 접속해보세요.`);
