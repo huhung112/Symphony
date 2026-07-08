@@ -3,8 +3,7 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
-// 🔹 압축 기능을 위한 모듈 추가
-const archiver = require('archiver'); 
+const { ZipArchive } = require('archiver');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -217,7 +216,7 @@ app.get('/api/videos/download-all', (req, res) => {
     res.attachment('symphony_videos.zip');
     
     // 압축 객체 생성 (최고 압축)
-    const archive = archiver('zip', {
+    const archive = new ZipArchive({
         zlib: { level: 9 } 
     });
     
